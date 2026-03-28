@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+dist/
+
+# Virtual environments
+.venv
+
+# uv
+.python-version
+
+# PyCharm
+.idea
+
+# Claude Code
+.claude
+
+# Environment files
+*.env

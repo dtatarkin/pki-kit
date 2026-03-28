@@ -1,0 +1,82 @@
+[project]
+name = "pki-kit"
+version = "0.0.1"
+description = "PKI"
+readme = "README.md"
+authors = [
+    { name = "Dmitry Tatarkin", email = "tatarkin@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "cryptography>=43.0",
+    "pydantic>=2.0",
+    "python-ulid>=3.0",
+    "ruamel-yaml>=0.18",
+]
+
+[project.optional-dependencies]
+cli = ["typer>=0.15", "rich>=13.0"]
+
+[project.scripts]
+pki-kit = "pki.cli:main"
+[dependency-groups]
+dev = [
+    "codespell",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "python-dotenv",
+    "ruff",
+    "ty",
+]
+
+[tool.uv.build-backend]
+module-name = "pki"
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "N", "UP", "B", "A", "C4", "DTZ", "T20", "SIM", "TCH", "RUF", "PT", "S", "ANN"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN", "S101"]
+"src/pki/cli/**/*.py" = ["T20", "TCH"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pki"]
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_decorators = false
+
+[[tool.mypy.overrides]]
+module = "pki.cli.*"
+disallow_untyped_decorators = false
+
+[[tool.mypy.overrides]]
+module = "ruamel.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ty.rules]
+unused-type-ignore-comment = "ignore"
+
+[tool.codespell]
+skip = ".git,uv.lock,dist"
