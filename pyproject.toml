@@ -1,12 +1,36 @@
 [project]
 name = "pki-kit"
-version = "0.0.1"
-description = "PKI"
+version = "0.0.2"
+description = "Unified Python toolkit for X.509 and Nebula PKI — issue, revoke, and export certificates for mTLS and overlay networks"
 readme = "README.md"
 authors = [
     { name = "Dmitry Tatarkin", email = "tatarkin@gmail.com" }
 ]
 requires-python = ">=3.12"
+keywords = [
+    "pki",
+    "x509",
+    "certificates",
+    "tls",
+    "mtls",
+    "nebula",
+    "certificate-authority",
+    "cryptography",
+    "security",
+    "infrastructure",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: Security :: Cryptography",
+    "Topic :: System :: Networking",
+    "Typing :: Typed",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
 dependencies = [
     "cryptography>=43.0",
     "pydantic>=2.0",
@@ -16,6 +40,11 @@ dependencies = [
 
 [project.optional-dependencies]
 cli = ["typer>=0.15", "rich>=13.0"]
+
+[project.urls]
+Homepage = "https://github.com/dtatarkin/pki-kit"
+Repository = "https://github.com/dtatarkin/pki-kit"
+Issues = "https://github.com/dtatarkin/pki-kit/issues"
 
 [project.scripts]
 pki-kit = "pki.cli:main"
