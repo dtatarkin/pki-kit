@@ -158,22 +158,22 @@ pki-kit nebula list
 
 Set defaults via environment variables:
 
-| Variable | Description |
-|---|---|
-| `PKI_KIT_BASE_PATH` | Root directory for filesystem stores |
-| `PKI_KIT_PKI_NAME` | PKI instance name (default: `default`) |
-| `PKI_KIT_SOPS_ARGS` | Extra arguments passed to SOPS |
+| Variable                | Description                            |
+| ----------------------- | -------------------------------------- |
+| `PKI_KIT_BASE_PATH`     | Root directory for filesystem stores   |
+| `PKI_KIT_PKI_NAME`      | PKI instance name (default: `default`) |
+| `PKI_KIT_SOPS_ARGS`     | Extra arguments passed to SOPS         |
 | `PKI_KIT_OUTPUT_FORMAT` | Output format: `TABLE`, `JSON`, `YAML` |
 
 ## Key Algorithms
 
-| Algorithm | Backend |
-|---|---|
-| `RSA_2048` | X.509 |
-| `RSA_4096` | X.509 |
-| `EC_P256` | X.509, Nebula |
-| `EC_P384` | X.509 |
-| `ED25519` | X.509, Nebula |
+| Algorithm  | Backend       |
+| ---------- | ------------- |
+| `RSA_2048` | X.509         |
+| `RSA_4096` | X.509         |
+| `EC_P256`  | X.509, Nebula |
+| `EC_P384`  | X.509         |
+| `ED25519`  | X.509, Nebula |
 
 ## Architecture
 

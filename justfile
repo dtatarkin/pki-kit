@@ -29,7 +29,7 @@ pre-commit *args:
 [group("lint")]
 lint:
     @# Retry once: hooks that auto-fix files (ruff, trailing-whitespace, etc.) fail on first run; second run verifies fixes.
-    just pre-commit run --all-files
+    just pre-commit run --all-files || just pre-commit run --all-files
 
 # Run tests with pytest
 [group("project")]
