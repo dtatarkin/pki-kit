@@ -1,41 +1,50 @@
 import "just.just"
 
-# Run a Python command via uv
+[doc("Run a Python command via uv")]
 [group("project")]
+[positional-arguments]
 python-run *args:
-    @uv run {{ args }}
+    @uv run "$@"
 
-# Bump the dev version
+[doc("Bump the dev version")]
 [group("project")]
 bump-dev:
     uv version --bump dev
 
-# Build the package
+[doc("Build the package")]
 [group("project")]
 build:
     uv build
 
-# Publish the package to PyPI
+[doc("Publish the package to PyPI")]
 [group("project")]
 publish:
     just python-run dotenv --file pypi.env run uv publish dist/*
 
-# Run pre-commit with custom arguments
+[doc("Run pre-commit with custom arguments")]
 [group("lint")]
+[positional-arguments]
 pre-commit *args:
-    just python-run pre-commit {{ args }}
+    just python-run pre-commit "$@"
 
-# Run all checks (pre-commit hooks, lint, typecheck)
+# Deliberately left without a shebang, and `just-lint` reports it as such. This
+# repository is released: someone may be at any pin, and putting a two-line body
+# under one shell with `set -euo pipefail` changes how the recipe executes, which
+# is the one thing release discipline exists to prevent. Help text and argument
+# handling are what a justfile here may change; this is neither.
+
+[doc("Run all checks (pre-commit hooks, lint, typecheck)")]
 [group("lint")]
 lint:
     @# Retry once: hooks that auto-fix files (ruff, trailing-whitespace, etc.) fail on first run; second run verifies fixes.
     just pre-commit run --all-files
 
-# Run tests with pytest
+[doc("Run tests with pytest")]
 [group("project")]
+[positional-arguments]
 test *args:
-    just python-run pytest {{ args }}
+    just python-run pytest "$@"
 
-# Run lint and tests
+[doc("Run lint and tests")]
 [group("project")]
 check: lint test
