@@ -3,6 +3,7 @@ name = "pki-kit"
 version = "0.0.2"
 description = "Unified Python toolkit for X.509 and Nebula PKI — issue, revoke, and export certificates for mTLS and overlay networks"
 readme = "README.md"
+license = "MIT"
 authors = [{ name = "Dmitry Tatarkin", email = "tatarkin@gmail.com" }]
 requires-python = ">=3.12"
 keywords = [
