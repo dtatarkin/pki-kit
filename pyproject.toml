@@ -3,39 +3,37 @@ name = "pki-kit"
 version = "0.0.2"
 description = "Unified Python toolkit for X.509 and Nebula PKI — issue, revoke, and export certificates for mTLS and overlay networks"
 readme = "README.md"
-authors = [
-    { name = "Dmitry Tatarkin", email = "tatarkin@gmail.com" }
-]
+authors = [{ name = "Dmitry Tatarkin", email = "tatarkin@gmail.com" }]
 requires-python = ">=3.12"
 keywords = [
-    "pki",
-    "x509",
-    "certificates",
-    "tls",
-    "mtls",
-    "nebula",
-    "certificate-authority",
-    "cryptography",
-    "security",
-    "infrastructure",
+  "pki",
+  "x509",
+  "certificates",
+  "tls",
+  "mtls",
+  "nebula",
+  "certificate-authority",
+  "cryptography",
+  "security",
+  "infrastructure",
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Intended Audience :: System Administrators",
-    "Topic :: Security :: Cryptography",
-    "Topic :: System :: Networking",
-    "Typing :: Typed",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Operating System :: OS Independent",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Topic :: Security :: Cryptography",
+  "Topic :: System :: Networking",
+  "Typing :: Typed",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
 ]
 dependencies = [
-    "cryptography>=43.0",
-    "pydantic>=2.0",
-    "python-ulid>=3.0",
-    "ruamel-yaml>=0.18",
+  "cryptography>=43.0",
+  "pydantic>=2.0",
+  "python-ulid>=3.0",
+  "ruamel-yaml>=0.18",
 ]
 
 [project.optional-dependencies]
@@ -50,13 +48,13 @@ Issues = "https://github.com/dtatarkin/pki-kit/issues"
 pki-kit = "pki.cli:main"
 [dependency-groups]
 dev = [
-    "codespell",
-    "mypy",
-    "pre-commit",
-    "pytest",
-    "python-dotenv",
-    "ruff",
-    "ty",
+  "codespell",
+  "mypy",
+  "pre-commit",
+  "pytest",
+  "python-dotenv",
+  "ruff",
+  "ty",
 ]
 
 [tool.uv.build-backend]
@@ -72,7 +70,25 @@ line-length = 120
 src = ["src"]
 
 [tool.ruff.lint]
-select = ["F", "E", "W", "I", "N", "UP", "B", "A", "C4", "DTZ", "T20", "SIM", "TCH", "RUF", "PT", "S", "ANN"]
+select = [
+  "F",
+  "E",
+  "W",
+  "I",
+  "N",
+  "UP",
+  "B",
+  "A",
+  "C4",
+  "DTZ",
+  "T20",
+  "SIM",
+  "TCH",
+  "RUF",
+  "PT",
+  "S",
+  "ANN",
+]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["ANN", "S101"]

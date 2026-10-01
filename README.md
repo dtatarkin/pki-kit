@@ -1,10 +1,13 @@
 # pki-kit
 
-A Python library for managing Public Key Infrastructures with a unified API across **X.509** and **[Nebula](https://github.com/slackhq/nebula)** certificate backends. Issue, revoke, export, and persist certificates programmatically or from the CLI.
+A Python library for managing Public Key Infrastructures with a unified API across **X.509** and
+**[Nebula](https://github.com/slackhq/nebula)** certificate backends. Issue, revoke, export, and persist certificates
+programmatically or from the CLI.
 
 ## Why pki-kit?
 
-Setting up mutual TLS or a Nebula overlay network typically means juggling `openssl`, `nebula-cert`, and ad-hoc scripts. pki-kit replaces all of that with a single, typed Python API:
+Setting up mutual TLS or a Nebula overlay network typically means juggling `openssl`, `nebula-cert`, and ad-hoc scripts.
+pki-kit replaces all of that with a single, typed Python API:
 
 - **Dual backend** -- X.509 and Nebula certificates through one interface
 - **Pluggable storage** -- in-memory (tests/CI) or filesystem with optional [SOPS](https://github.com/getsops/sops) encryption for private keys
@@ -177,7 +180,7 @@ Set defaults via environment variables:
 
 ## Architecture
 
-```
+```text
 Pki (abstract)
 ├── X509Pki          ─── CryptoProvider ─── KeyStore
 └── NebulaPki                                  ├── InMemoryKeyStore
@@ -191,7 +194,8 @@ StateStore
 └── FilesystemStateStore (YAML)
 ```
 
-All stores default to in-memory implementations -- swap in filesystem stores when you need persistence, with no changes to your certificate logic.
+All stores default to in-memory implementations -- swap in filesystem stores when you need persistence, with no changes
+to your certificate logic.
 
 ## Development
 
