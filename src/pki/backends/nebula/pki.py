@@ -86,7 +86,7 @@ def _run_nebula_cert(
 ) -> subprocess.CompletedProcess[str]:
     cmd = [nebula_cert_path, *args]
     try:
-        return subprocess.run(cmd, capture_output=True, text=True, check=True, cwd=cwd)  # noqa: S603
+        return subprocess.run(cmd, capture_output=True, text=True, check=True, cwd=cwd)
     except FileNotFoundError as exc:
         raise NebulaCertError(f"nebula-cert binary not found: {nebula_cert_path}") from exc
     except subprocess.CalledProcessError as exc:

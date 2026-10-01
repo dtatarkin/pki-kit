@@ -1,0 +1,11 @@
+[MD013]
+line_length = 120
+# A table cannot be wrapped without breaking it, and wrapping a code block
+# changes the code.
+tables = false
+code_blocks = false
+
+[MD041]
+# A document that is a fragment of a larger whole legitimately starts below
+# the top level; the rule cannot tell it from a file missing its title.
+enabled = false

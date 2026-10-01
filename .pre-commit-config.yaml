@@ -1,75 +1,116 @@
+# The hook set follows from what this repository contains: the baseline every
+# repository runs, the Python set (pyproject.toml and *.py) and the markup set
+# (YAML, TOML, markdown). There is no shell script and no infrastructure file
+# here, so no shell or scanner hook; nixfmt is inert while there is no nix file.
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: end-of-file-fixer
       - id: trailing-whitespace
-      - id: check-yaml
-      - id: check-json
-      - id: check-toml
-      - id: check-merge-conflict
-      - id: check-added-large-files
-        args: ["--maxkb=500"]
+      - id: end-of-file-fixer
       - id: mixed-line-ending
-        args: ["--fix=lf"]
-      - id: detect-private-key
+        args: [--fix=lf]
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+      - id: check-merge-conflict
       - id: check-case-conflict
       - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: debug-statements
+      - id: detect-private-key
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.50.2
+    hooks:
+      - id: typos
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.7
+    rev: v0.16.8
     hooks:
-      - id: ruff
-        args: ["--fix"]
+      - id: ruff-check
+        args: [--fix]
       - id: ruff-format
+        types_or: [python, pyi, jupyter]
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.12.18
+    hooks:
+      - id: uv-lock
+
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: "0.26"
+    hooks:
+      - id: validate-pyproject
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args: [--strict]
+
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format
+
+  - repo: https://github.com/rvben/rumdl-pre-commit
+    rev: v0.2.77
+    hooks:
+      - id: rumdl-check
+        args: [--fix]
 
   - repo: local
     hooks:
-      - id: dprint
-        name: dprint
-        entry: npx dprint fmt
+      # The loop is needed: the formatter takes one file at a time. It runs the
+      # `just` this repository's lockfile pins, so every clone formats with the
+      # same build.
+      - id: format-justfile
+        name: format justfile
+        entry: bash -c 'for f in "$@"; do uv run just --fmt --unstable --justfile "$f"; done' --
         language: system
-        types: [markdown]
+        files: (^|/)justfile$|\.just$
 
-  - repo: local
-    hooks:
+      - id: nixfmt
+        name: nixfmt
+        entry: nixfmt
+        language: system
+        files: \.nix$
+
+      # Both type checkers run through the lockfile, so they see the installed
+      # dependencies and the pydantic plugin, and both reason over the whole
+      # program: triggered by a Python file, never handed the file list.
+      - id: mypy
+        name: mypy
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+
       - id: ty
-        name: ty check
+        name: ty
         entry: uv run ty check .
         language: system
         types: [python]
         pass_filenames: false
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
-    hooks:
-      - id: mypy
-        additional_dependencies: ["pydantic>=2.0"]
-
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
-    hooks:
-      - id: codespell
-
-  - repo: https://github.com/instrumentl/pre-commit-just
-    rev: v0.1
-    hooks:
-      - id: format-justfile
-
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.3
-    hooks:
-      - id: gitleaks
-
-  - repo: https://github.com/pypa/pip-audit
-    rev: v2.9.0
-    hooks:
+      # Manual stage only: it queries an advisory database over the network,
+      # and a commit never waits on a remote service. By hand:
+      # `just pre-commit run --hook-stage manual pip-audit`.
       - id: pip-audit
-
-  - repo: local
-    hooks:
-      - id: trivy-config
-        name: trivy config scan
-        entry: trivy config --severity HIGH,CRITICAL .
+        name: pip-audit
+        entry: >-
+          bash -c 'uv export --no-hashes --no-emit-workspace --no-dev --quiet
+          | uvx --quiet pip-audit --requirement /dev/stdin --disable-pip --no-deps --strict'
         language: system
+        stages: [manual]
+        always_run: true
         pass_filenames: false

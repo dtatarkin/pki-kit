@@ -96,7 +96,7 @@ class FilesystemKeyStore(KeyStore):
     ) -> subprocess.CompletedProcess[str]:
         cmd = [self._sops_binary, *args]
         try:
-            return subprocess.run(  # noqa: S603
+            return subprocess.run(
                 cmd,
                 input=input_data,
                 capture_output=True,

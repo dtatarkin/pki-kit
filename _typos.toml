@@ -1,0 +1,10 @@
+[files]
+# A lockfile is not text anyone wrote: a hash that spells a word is not a typo.
+extend-exclude = ["uv.lock"]
+
+[default]
+# A PEM body is base64, not prose. The dictionary reads fragments of it as
+# words (`UE`, `Ba`), and this hook rewrites files in place, so a "correction"
+# there would corrupt a certificate fixture. Skip any unbroken run of 40 or
+# more base64 characters.
+extend-ignore-re = ["[A-Za-z0-9+/]{40,}={0,2}"]

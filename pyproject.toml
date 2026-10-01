@@ -48,12 +48,16 @@ Issues = "https://github.com/dtatarkin/pki-kit/issues"
 pki-kit = "pki.cli:main"
 [dependency-groups]
 dev = [
-  "codespell",
   "mypy",
+  # The type checkers read the command-line package, which imports the
+  # optional dependencies of the `cli` extra.
+  "pki-kit[cli]",
   "pre-commit",
   "pytest",
   "python-dotenv",
   "ruff",
+  # Pins the `just` the justfile formatter hook runs.
+  "rust-just",
   "ty",
 ]
 
@@ -89,6 +93,9 @@ select = [
   "S",
   "ANN",
 ]
+# Calling a tool by name, resolved on PATH, is how this library reaches the
+# binaries it drives; these two rules fire on every such call.
+ignore = ["S603", "S607"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["ANN", "S101"]
@@ -104,6 +111,7 @@ runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 strict = true
 plugins = ["pydantic.mypy"]
 mypy_path = "src"
+files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
 module = "tests.*"
@@ -122,6 +130,3 @@ testpaths = ["tests"]
 
 [tool.ty.rules]
 unused-type-ignore-comment = "ignore"
-
-[tool.codespell]
-skip = ".git,uv.lock,dist"

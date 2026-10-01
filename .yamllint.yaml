@@ -1,0 +1,8 @@
+extends: default
+
+rules:
+  # Hook configurations carry no leading document marker.
+  document-start: disable
+  # One width across the repository: the markdown rules use the same number.
+  line-length:
+    max: 120

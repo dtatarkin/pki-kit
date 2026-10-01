@@ -36,7 +36,7 @@ def age_recipient(monkeypatch: pytest.MonkeyPatch) -> str:
     if not shutil.which("age-keygen"):
         pytest.skip("age-keygen not found on PATH")
     result = subprocess.run(
-        ["age-keygen"],  # noqa: S607
+        ["age-keygen"],
         capture_output=True,
         text=True,
         check=True,
