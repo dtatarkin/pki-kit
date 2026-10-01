@@ -1,0 +1,11 @@
+# Commits that reformatted files wholesale and changed no content. Git honours
+# this list only where the clone asks it to:
+#
+#     git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# One line per commit: the full hash, then `#` and what it was. Git reads
+# anything after the hash that is not behind a `#` as part of the object name,
+# and every `git blame` in a clone that honours the list then fails.
+
+# The first run of the TOML and markdown formatters.
+840c744a38d7930eea807e997f81ccbac0938225  # style: reformat pyproject.toml and README.md
