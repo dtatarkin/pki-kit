@@ -62,6 +62,11 @@ dev = [
   "ty",
 ]
 
+[tool.uv]
+# The lockfile resolves under the hook pins' seven-day cooldown: a release less
+# than a week old is where a broken or compromised upload is still live.
+exclude-newer = "7 days"
+
 [tool.uv.build-backend]
 module-name = "pki"
 
@@ -99,7 +104,9 @@ select = [
 ignore = ["S603", "S607"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["ANN", "S101"]
+# Tests are made of fixtures named password, secret and token: the credential
+# rules match the name, never the value.
+"tests/**" = ["S101", "S105", "S106", "S107", "ANN"]
 "src/pki/cli/**/*.py" = ["T20", "TCH"]
 
 [tool.ruff.lint.isort]
