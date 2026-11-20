@@ -23,6 +23,13 @@ class KeyNotFoundError(PkiError):
         super().__init__(f"Key not found: {serial_number}")
 
 
+class PublicKeyInUseError(PkiError):
+    def __init__(self, common_name: str, serial_number: SerialNumber) -> None:
+        self.common_name = common_name
+        self.serial_number = serial_number
+        super().__init__(f"Public key already signed for host {common_name!r} (certificate {serial_number})")
+
+
 class CertificateValidityExceedsCAError(PkiError):
     def __init__(self, cert_not_after: str, ca_not_after: str) -> None:
         super().__init__(f"Certificate not_after ({cert_not_after}) exceeds CA not_after ({ca_not_after})")

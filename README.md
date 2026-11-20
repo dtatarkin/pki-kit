@@ -167,6 +167,55 @@ Set defaults via environment variables:
 | `PKI_KIT_PKI_NAME` | PKI instance name (default: `default`) |
 | `PKI_KIT_SOPS_ARGS` | Extra arguments passed to SOPS |
 | `PKI_KIT_OUTPUT_FORMAT` | Output format: `TABLE`, `JSON`, `YAML` |
+| `PKI_NEBULA_CA_KEY` | Nebula: file holding the signing CA's private key (same as `--ca-key`) |
+
+### Nebula without private keys in the PKI
+
+By default `nebula issue` generates each host's key pair and keeps the private key, SOPS-encrypted, in the key store
+beside the CA key. The three flows below keep every private key out of the PKI's base path: the host keeps its own key,
+and the CA key is read from wherever you hold it at the moment of signing.
+
+**Issue from the host's public key.** The host generates its key pair and hands over only the public key; the PKI
+signs it and stores the certificate, no key. The key algorithm follows the public key. A public key already signed for
+another host name, current or revoked, is refused with that host's name.
+
+```bash
+# on the host
+nebula-cert keygen -out-key host1.key -out-pub host1.pub
+
+# at the PKI
+pki-kit nebula issue --common-name host1 --ip 10.0.0.1/24 --groups servers \
+  --ca-serial <ca-serial> --duration 365d --public-key host1.pub --ca-key <ca-key-file>
+pki-kit nebula export-cert <host1-serial> -o host1.crt
+```
+
+**Hold the CA key outside the PKI.** `--ca-key <file>` (or `PKI_NEBULA_CA_KEY`) names the CA's private key; signing
+reads it from there and never from the key store. The file can be a tmpfs path or a process substitution that pulls the
+key from a secret manager, so it never lands on disk:
+
+```bash
+pki-kit nebula issue ... --ca-key <(my-secret-manager read nebula-ca-key)
+```
+
+To move a CA created by `issue-ca` out of the key store, export its key into your secret manager and delete it from
+`keys/`:
+
+```bash
+pki-kit nebula export-key <ca-serial> | my-secret-manager write nebula-ca-key
+rm keys/<pki-name>-<ca-serial>-key.yaml
+```
+
+**Renew without the host.** `nebula renew` re-signs the public key of an existing host certificate with the same name,
+IP, groups and subnets, under the same CA, for `--duration` or else the original duration. Neither the host's private
+key nor the host itself is involved; it picks up the new certificate and keeps its key. The original certificate stays
+valid until it expires or you revoke it.
+
+```bash
+pki-kit nebula renew <host1-serial> --ca-key <ca-key-file>
+```
+
+The same flows are available from Python: `NebulaCertificateRequest(public_key=...)`,
+`NebulaPki(ca_key_path=...)` and `NebulaPki.renew_certificate()`.
 
 ## Key Algorithms
 

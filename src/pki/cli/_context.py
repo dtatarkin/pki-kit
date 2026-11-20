@@ -66,8 +66,16 @@ def x509_session(ctx: CliContext, *, save_state: bool = True) -> Iterator[X509Pk
 
 
 @contextmanager
-def nebula_session(ctx: CliContext, *, save_state: bool = True) -> Iterator[NebulaPki]:
-    """Create a fully-wired NebulaPki with filesystem stores."""
+def nebula_session(
+    ctx: CliContext,
+    *,
+    save_state: bool = True,
+    ca_key_path: Path | None = None,
+) -> Iterator[NebulaPki]:
+    """Create a fully-wired NebulaPki with filesystem stores.
+
+    With *ca_key_path*, host signing reads the CA key from that file instead of the key store.
+    """
     from pki.backends.nebula.pki import NebulaCertData, NebulaCertificateRequest, NebulaPki
     from pki.certificate_stores.filesystem import FilesystemCertificateStore
     from pki.key_stores.filesystem import FilesystemKeyStore
@@ -89,7 +97,12 @@ def nebula_session(ctx: CliContext, *, save_state: bool = True) -> Iterator[Nebu
     state_store = FilesystemStateStore(ctx.base_path, pki_name=ctx.pki_name)
     pki_state = state_store.load_state()
 
-    pki = NebulaPki(pki_state=pki_state, key_store=key_store, certificate_store=cert_store)
+    pki = NebulaPki(
+        pki_state=pki_state,
+        key_store=key_store,
+        certificate_store=cert_store,
+        ca_key_path=ca_key_path,
+    )
     yield pki
 
     if save_state:
